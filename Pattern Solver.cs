@@ -8,7 +8,9 @@ class Program
     static Random rand = new Random();
     static void Main()
     {
-        int toSolve = 589632147;
+        int toSolve = rand.Next(999999999);
+        Console.WriteLine($"To Guess = {toGuess}");
+        
         long totalAttempt = 0;
         Console.WriteLine("Enter the amount of itirations you would like:");
         string? itirationStr = Console.ReadLine();
