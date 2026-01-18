@@ -8,9 +8,9 @@ class Program
     static Random rand = new Random();
     static void Main()
     {
-        int toSolve = rand.Next(999999999);
+        int toGuess = rand.Next(999999999);
         Console.WriteLine($"To Guess = {toGuess}");
-        
+
         long totalAttempt = 0;
         Console.WriteLine("Enter the amount of itirations you would like:");
         string? itirationStr = Console.ReadLine();
@@ -24,7 +24,7 @@ class Program
 
         if(!int.TryParse(itirationStr, out int itiration))
         {
-            Console.WriteLine("Pleasse enter a valid integer");
+            Console.WriteLine("Please enter a valid integer");
             return;
         }
 
@@ -33,11 +33,11 @@ class Program
 
         for (int i = 0; i < itiration; i++)
         {
-            totalAttempt += Solve(toSolve);
+            totalAttempt += Solve(toGuess);
         }
 
         stopwatch.Stop();
-        Console.WriteLine($"To Solve = {toSolve}");
+        Console.WriteLine($"To Solve = {toGuess}");
         for (int i = 0; i < itiration; i++)
         {
             Console.WriteLine($"Itiration {i}:");
@@ -58,7 +58,7 @@ class Program
         Console.WriteLine($"Average Milisecond Time = {averageTimeMs}");
         Console.WriteLine($"Average Second Time = {averageTimeMs / 1000.0}");
     }
-    static long Solve(long toSolve)
+    static long Solve(long toGuess)
     {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
@@ -69,7 +69,7 @@ class Program
         {
             guess = rand.Next(999999999);
 
-            if (guess == toSolve)
+            if (guess == toGuess)
             {
                 stopwatch.Stop();
 
