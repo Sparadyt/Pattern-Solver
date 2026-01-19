@@ -44,7 +44,7 @@ class Program
             Console.WriteLine($"Iteration {i + 1}:");
             Console.WriteLine($"To Guess = {toGuesses[i]}");
             Console.WriteLine($"Attempts = {stats[i].attempts}");
-            Console.WriteLine($"Time in miliseconds = {stats[i].timeMs}ms");
+            Console.WriteLine($"Time in milliseconds = {stats[i].timeMs}ms");
             Console.WriteLine($"Time in second =  {stats[i].timeSec}sec");
             Console.WriteLine();
         }
@@ -53,14 +53,14 @@ class Program
             return;
 
         Console.WriteLine($"Total Attempts = {totalAttempt}");
-        Console.WriteLine($"Total Milisecond Time = {totalTimeMs}");
+        Console.WriteLine($"Total Millisecond Time = {totalTimeMs}");
         Console.WriteLine($"Total Second Time = {totalTimeMs / 1000.0}");
 
         double averageAttempt = totalAttempt / (double)iteration;
         double averageTimeMs = totalTimeMs / (double)iteration;
         Console.WriteLine();
         Console.WriteLine($"Average Attempts = {averageAttempt}");
-        Console.WriteLine($"Average Milisecond Time = {averageTimeMs}ms");
+        Console.WriteLine($"Average Millisecond Time = {averageTimeMs}ms");
         Console.WriteLine($"Average Second Time = {averageTimeMs / 1000.0}sec");
     }
 
