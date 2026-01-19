@@ -25,21 +25,22 @@ class Program
             return;
         }
 
+        int[] toGuesses = new int[itiration];
+
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
 
         for (int i = 0; i < itiration; i++)
         {
-            int toGuess = rand.Next(999999999);
-            Console.WriteLine($"To Guess = {toGuess}");
-            totalAttempt += Solve(toGuess);
+            toGuesses[i] = rand.Next(999999999);
+            totalAttempt += Solve(toGuesses[i]);
         }
 
         stopwatch.Stop();
-        Console.WriteLine($"To Solve = {toGuess}");
         for (int i = 0; i < itiration; i++)
         {
             Console.WriteLine($"Itiration {i}:");
+            Console.WriteLine($"To Guess = {toGuesses[i]}");
             Console.WriteLine($"Attempts = {stats[i].attempts}");
             Console.WriteLine($"Time in miliseconds = {stats[i].timeMs}ms");
             Console.WriteLine($"Time in second =  {stats[i].timeSec}sec");
@@ -57,7 +58,8 @@ class Program
         Console.WriteLine($"Average Milisecond Time = {averageTimeMs}");
         Console.WriteLine($"Average Second Time = {averageTimeMs / 1000.0}");
     }
-    static long Solve(long toGuess)
+
+    static long Solve(int toGuess)
     {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
