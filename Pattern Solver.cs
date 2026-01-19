@@ -8,9 +8,6 @@ class Program
     static Random rand = new Random();
     static void Main()
     {
-        int toGuess = rand.Next(999999999);
-        Console.WriteLine($"To Guess = {toGuess}");
-
         long totalAttempt = 0;
         Console.WriteLine("Enter the amount of itirations you would like:");
         string? itirationStr = Console.ReadLine();
@@ -33,6 +30,8 @@ class Program
 
         for (int i = 0; i < itiration; i++)
         {
+            int toGuess = rand.Next(999999999);
+            Console.WriteLine($"To Guess = {toGuess}");
             totalAttempt += Solve(toGuess);
         }
 
