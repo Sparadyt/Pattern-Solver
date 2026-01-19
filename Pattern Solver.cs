@@ -26,20 +26,22 @@ class Program
         }
 
         int[] toGuesses = new int[iteration];
-
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
+        long totalTimeMs = 0;
+        Console.Clear();
 
         for (int i = 0; i < iteration; i++)
         {
             toGuesses[i] = rand.Next(999999999);
             totalAttempt += Solve(toGuesses[i]);
+            totalTimeMs += stats[i].timeMs;
+            Console.Write($"\rIteration {i + 1}/{iteration} finished");
         }
 
-        stopwatch.Stop();
+        Console.WriteLine("\n");
+
         for (int i = 0; i < iteration; i++)
         {
-            Console.WriteLine($"Iteration {i}:");
+            Console.WriteLine($"Iteration {i + 1}:");
             Console.WriteLine($"To Guess = {toGuesses[i]}");
             Console.WriteLine($"Attempts = {stats[i].attempts}");
             Console.WriteLine($"Time in miliseconds = {stats[i].timeMs}ms");
@@ -47,16 +49,19 @@ class Program
             Console.WriteLine();
         }
 
+        if(iteration == 1)
+            return;
+
         Console.WriteLine($"Total Attempts = {totalAttempt}");
-        Console.WriteLine($"Total Milisecond Time = {stopwatch.ElapsedMilliseconds}");
-        Console.WriteLine($"Total Second Time = {stopwatch.ElapsedMilliseconds / 1000.0}");
+        Console.WriteLine($"Total Milisecond Time = {totalTimeMs}");
+        Console.WriteLine($"Total Second Time = {totalTimeMs / 1000.0}");
 
         double averageAttempt = totalAttempt / (double)iteration;
-        double averageTimeMs = stopwatch.ElapsedMilliseconds / (double)iteration;
+        double averageTimeMs = totalTimeMs / (double)iteration;
         Console.WriteLine();
         Console.WriteLine($"Average Attempts = {averageAttempt}");
-        Console.WriteLine($"Average Milisecond Time = {averageTimeMs}");
-        Console.WriteLine($"Average Second Time = {averageTimeMs / 1000.0}");
+        Console.WriteLine($"Average Milisecond Time = {averageTimeMs}ms");
+        Console.WriteLine($"Average Second Time = {averageTimeMs / 1000.0}sec");
     }
 
     static long Solve(int toGuess)
