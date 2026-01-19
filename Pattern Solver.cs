@@ -9,37 +9,37 @@ class Program
     static void Main()
     {
         long totalAttempt = 0;
-        Console.WriteLine("Enter the amount of itirations you would like:");
-        string? itirationStr = Console.ReadLine();
+        Console.WriteLine("Enter the amount of iterations you would like:");
+        string? iterationStr = Console.ReadLine();
 
-        if(String.IsNullOrWhiteSpace(itirationStr))
+        if(String.IsNullOrWhiteSpace(iterationStr))
         {
             Console.WriteLine("Please enter something");
             return;
         }
 
 
-        if(!int.TryParse(itirationStr, out int itiration))
+        if(!int.TryParse(iterationStr, out int iteration))
         {
             Console.WriteLine("Please enter a valid integer");
             return;
         }
 
-        int[] toGuesses = new int[itiration];
+        int[] toGuesses = new int[iteration];
 
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
 
-        for (int i = 0; i < itiration; i++)
+        for (int i = 0; i < iteration; i++)
         {
             toGuesses[i] = rand.Next(999999999);
             totalAttempt += Solve(toGuesses[i]);
         }
 
         stopwatch.Stop();
-        for (int i = 0; i < itiration; i++)
+        for (int i = 0; i < iteration; i++)
         {
-            Console.WriteLine($"Itiration {i}:");
+            Console.WriteLine($"Iteration {i}:");
             Console.WriteLine($"To Guess = {toGuesses[i]}");
             Console.WriteLine($"Attempts = {stats[i].attempts}");
             Console.WriteLine($"Time in miliseconds = {stats[i].timeMs}ms");
@@ -51,8 +51,8 @@ class Program
         Console.WriteLine($"Total Milisecond Time = {stopwatch.ElapsedMilliseconds}");
         Console.WriteLine($"Total Second Time = {stopwatch.ElapsedMilliseconds / 1000.0}");
 
-        double averageAttempt = totalAttempt / (double)itiration;
-        double averageTimeMs = stopwatch.ElapsedMilliseconds / (double)itiration;
+        double averageAttempt = totalAttempt / (double)iteration;
+        double averageTimeMs = stopwatch.ElapsedMilliseconds / (double)iteration;
         Console.WriteLine();
         Console.WriteLine($"Average Attempts = {averageAttempt}");
         Console.WriteLine($"Average Milisecond Time = {averageTimeMs}");
