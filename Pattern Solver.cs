@@ -1,89 +1,162 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
-class Program
+public static class Program
 {
-    static List<(long attempts, long timeMs, double timeSec)> stats = new List<(long attempts, long timeMs, double timeSec)>();
-    static Random rand = new Random();
+    static (int x, int y) pos;
+    public static Random rand = new Random();
+
     static void Main()
     {
-        long totalAttempt = 0;
+        Console.Clear();
         Console.WriteLine("Enter the amount of iterations you would like:");
         string? iterationStr = Console.ReadLine();
 
-        if(String.IsNullOrWhiteSpace(iterationStr))
+        if (string.IsNullOrWhiteSpace(iterationStr))
         {
-            Console.WriteLine("Please enter something");
+            PrintError("Please enter something");
             return;
         }
 
-
-        if(!int.TryParse(iterationStr, out int iteration))
+        if (!int.TryParse(iterationStr, out int iteration))
         {
-            Console.WriteLine("Please enter a valid integer");
+            PrintError("Please enter a valid integer");
             return;
         }
 
-        int[] toGuesses = new int[iteration];
-        long totalTimeMs = 0;
+        if(iteration < 0)
+        {
+            PrintError("Please enter a number more that -1");
+            return;
+        }
+
+        ulong totalTimeMs = 0;
+        ulong totalAttempts = 0;
         Console.Clear();
 
+        //Iteration
         for (int i = 0; i < iteration; i++)
         {
-            toGuesses[i] = rand.Next(999999999);
-            totalAttempt += Solve(toGuesses[i]);
-            totalTimeMs += stats[i].timeMs;
-            Console.Write($"\rIteration {i + 1}/{iteration} finished");
-        }
+            ulong attempts = 0;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
-        Console.WriteLine("\n");
+            ToGuess toGuess = new ToGuess();
+            toGuess.GenerateToGuess();
 
-        for (int i = 0; i < iteration; i++)
-        {
-            Console.WriteLine($"Iteration {i + 1}:");
-            Console.WriteLine($"To Guess = {toGuesses[i]}");
-            Console.WriteLine($"Attempts = {stats[i].attempts}");
-            Console.WriteLine($"Time in milliseconds = {stats[i].timeMs}ms");
-            Console.WriteLine($"Time in second =  {stats[i].timeSec}sec");
-            Console.WriteLine();
-        }
-
-        if(iteration == 1)
-            return;
-
-        Console.WriteLine($"Total Attempts = {totalAttempt}");
-        Console.WriteLine($"Total Millisecond Time = {totalTimeMs}");
-        Console.WriteLine($"Total Second Time = {totalTimeMs / 1000.0}");
-
-        double averageAttempt = totalAttempt / (double)iteration;
-        double averageTimeMs = totalTimeMs / (double)iteration;
-        Console.WriteLine();
-        Console.WriteLine($"Average Attempts = {averageAttempt}");
-        Console.WriteLine($"Average Millisecond Time = {averageTimeMs}ms");
-        Console.WriteLine($"Average Second Time = {averageTimeMs / 1000.0}sec");
-    }
-
-    static long Solve(int toGuess)
-    {
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
-        int guess = 0;
-        long attempt = 0;
-
-        while (true)
-        {
-            guess = rand.Next(999999999);
-
-            if (guess == toGuess)
+            //Starting Move
+            while (true)
             {
-                stopwatch.Stop();
+                List<(int x, int y)> moves = new List<(int x, int y)>();
+                bool repeat = true;
 
-                stats.Add((attempt, stopwatch.ElapsedMilliseconds, stopwatch.ElapsedMilliseconds / 1000.0));
-                return attempt;
+                //Choosing random starting position
+                pos = (rand.Next(1, 4), rand.Next(1, 4));
+
+                //Move
+                while (true)
+                {
+                    int same = 0;
+                    attempts++;
+
+                    List<(int x, int y)> validMoves = GetPossibleMoves(pos, moves);
+
+                    //If there are no valid moves left, break
+                    if (validMoves.Count == 0)
+                    {
+                        pos = (rand.Next(1, 4), rand.Next(1, 4));
+                        break;
+                    }
+
+                    pos = Move(validMoves);
+                    moves.Add(pos);
+
+                    //Checking if elements match
+                    for(int j = 0; j < toGuess.toGuess.Count; j++)
+                    {
+                        if(j == moves.Count || j == toGuess.toGuess.Count)
+                        {
+                            break;
+                        }
+
+                        if(moves[j] == toGuess.toGuess[j])
+                        {
+                            same++;
+                        }
+                    }
+
+                    if(same == toGuess.toGuess.Count)
+                    {
+                        repeat = false;
+                        break;
+                    }
+                }
+
+                if(!repeat)
+                {
+                    break;
+                }
             }
 
-            attempt++;
+            stopwatch.Stop();
+            totalTimeMs += Convert.ToUInt64(stopwatch.ElapsedMilliseconds);
+            totalAttempts += attempts;
+
+            Console.WriteLine($"Iteration {i + 1}:");
+            Console.WriteLine($"  Attempts = {attempts}");
+            Console.Write($"  To guess = ");
+            foreach(var toGuess2 in toGuess.toGuess)
+                Console.Write($"{toGuess2}, ");
+            Console.WriteLine("\b\b");
+
+            Console.WriteLine($"  Total attempts = {totalAttempts}");
+            Console.WriteLine($"  Time in milliseconds = {stopwatch.ElapsedMilliseconds}ms");
+            Console.WriteLine($"  Total time in ms = {totalTimeMs}ms");
+            Console.WriteLine($"  Time in seconds = {stopwatch.Elapsed.TotalSeconds}sec");
+            Console.WriteLine($"  Total time in seconds = {totalTimeMs / 1000.0}sec");
+            Console.WriteLine();
         }
+    }
+
+    public static List<(int x, int y)> GetPossibleMoves((int x, int y) pos, List<(int x, int y)> takenPos_)
+    {
+        //List of all the moves
+        List<(int x, int y)> validMoves = new List<(int x, int y)>
+        {
+            (1, 1), (2, 1), (3, 1),
+            (1, 2), (2, 2), (3, 2),
+            (1, 3), (2, 3), (3, 3)
+        };
+
+        //Removes taken moves
+        validMoves = validMoves.Where(move => !takenPos_.Contains(move)).ToList();
+        validMoves.Remove(pos);
+
+        for(int i = validMoves.Count - 1; i >= 0; i--)
+        {
+            if(((pos.x + 2) == validMoves[i].x && (pos.y - 1 != validMoves[i].y || (pos.y + 1 != validMoves[i].y)) ||
+            (pos.y + 2) == validMoves[i].y && (pos.x - 1 != validMoves[i].x || (pos.x + 1 != validMoves[i].x)) ||
+            (pos.x - 2) == validMoves[i].x && (pos.y - 1 != validMoves[i].y || (pos.y + 1 != validMoves[i].y)) ||
+            (pos.y - 2) == validMoves[i].y && (pos.x - 1 != validMoves[i].x || (pos.x + 1 != validMoves[i].x))))
+                validMoves.Remove(validMoves[i]);
+        }
+
+        return validMoves;
+    }
+
+    public static (int x, int y) Move(List<(int x, int y)> validMoves)
+    {
+        return validMoves[rand.Next(validMoves.Count)];
+    }
+
+    public static void PrintError(string message)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"Error: {message}");
+        Console.ResetColor();
+        Console.WriteLine("(Enter any key to continue)");
+        Console.ReadKey();
     }
 }

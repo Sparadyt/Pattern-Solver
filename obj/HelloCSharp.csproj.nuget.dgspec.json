@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HELLO-WORLD\\OneDrive\\Documents\\GitHub\\Pattern-Solver\\HelloCSharp.csproj": {}
+    "C:\\projects\\Pattern-Solver\\HelloCSharp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HELLO-WORLD\\OneDrive\\Documents\\GitHub\\Pattern-Solver\\HelloCSharp.csproj": {
+    "C:\\projects\\Pattern-Solver\\HelloCSharp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HELLO-WORLD\\OneDrive\\Documents\\GitHub\\Pattern-Solver\\HelloCSharp.csproj",
+        "projectUniqueName": "C:\\projects\\Pattern-Solver\\HelloCSharp.csproj",
         "projectName": "HelloCSharp",
-        "projectPath": "C:\\Users\\HELLO-WORLD\\OneDrive\\Documents\\GitHub\\Pattern-Solver\\HelloCSharp.csproj",
+        "projectPath": "C:\\projects\\Pattern-Solver\\HelloCSharp.csproj",
         "packagesPath": "C:\\Users\\HELLO-WORLD\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HELLO-WORLD\\OneDrive\\Documents\\GitHub\\Pattern-Solver\\obj\\",
+        "outputPath": "C:\\projects\\Pattern-Solver\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HELLO-WORLD\\AppData\\Roaming\\NuGet\\NuGet.Config"
